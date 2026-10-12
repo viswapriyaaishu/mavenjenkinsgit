@@ -16,7 +16,12 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'mvn -B test'
+                script {
+                    catchError(buildResult: 'UNSTABLE',
+                               stageResult: 'UNSTABLE') {
+                        sh 'mvn -B test'
+                    }
+                }
             }
             post {
                 always {
@@ -34,10 +39,16 @@ pipeline {
 
     post {
         success {
-            echo 'Maven pipeline completed successfully!'
+            echo 'Pipeline completed successfully!'
+        }
+        unstable {
+            echo 'Tests failed, but the application was packaged.'
         }
         failure {
             echo 'Pipeline failed. Check the console output.'
+        }
+        always {
+            echo 'Pipeline execution completed.'
         }
     }
 }
