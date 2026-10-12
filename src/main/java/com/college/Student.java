@@ -25,4 +25,8 @@ public class Student {
     public String getDisplayName() {
         return StringUtils.capitalize(name);
     }
+
+    public String getSearchInfo() {
+    return "Student search feature";
+}
 }
